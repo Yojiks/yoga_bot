@@ -1,7 +1,8 @@
-from sqlalchemy import BigInteger, ForeignKey
+from sqlalchemy import BigInteger, ForeignKey, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.ext.asyncio import AsyncAttrs, async_sessionmaker, create_async_engine
 from datetime import datetime, time
+
 
 engine = create_async_engine(url='sqlite+aiosqlite:///db.sqlite3')
 
@@ -38,6 +39,7 @@ class Booking(Base):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     slot_id: Mapped[int] = mapped_column(ForeignKey("slots.id"))
     is_paid: Mapped[bool] = mapped_column(default=False)
+    confirmation_code: Mapped[str] = mapped_column(String, nullable=True)
     
     user: Mapped["User"] = relationship(backref="bookings")
     slot: Mapped["Slot"] = relationship(backref="bookings")

@@ -69,3 +69,37 @@ async def inline_slots(slots: list[Slot]) -> InlineKeyboardMarkup:
     ])
 
     return markup
+
+
+def my_bookings_keyboard(bookings: list) -> InlineKeyboardMarkup:
+    keyboard = []
+    
+    
+    for booking in bookings:
+        dt_str = booking.slot.date.strftime('%d.%m %H:%M')
+        
+        if not booking.is_paid:
+            buttons_row = [
+                InlineKeyboardButton(
+                    text=f"✅ Оплатить {dt_str}",
+                    callback_data=f"pay_{booking.id}"
+                ),
+                InlineKeyboardButton(
+                    text=f"❌ Отменить {dt_str}",
+                    callback_data=f"cancel_{booking.id}"
+                )
+            ]
+            keyboard.append(buttons_row)
+        
+    keyboard.append([
+        InlineKeyboardButton(text="◀ Назад", callback_data="go_back")
+    ])
+    
+    return InlineKeyboardMarkup(inline_keyboard=keyboard)
+
+
+def go_back_markup() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="◀ На главную", callback_data="go_back")]
+    ])
+    
